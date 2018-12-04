@@ -55,7 +55,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
                     errorListener.onError("only alphanumeric keys are allowed,invalid key:"+kvEntry[0].trim());
                     continue;
                 }
-                //If it's atomic data, then store it into the processor and skip it, as we will process them together later.
+                //If it's atomic data, then store it into the processor and continue,will process them together later.
                 boolean isAtomicNum = atomicDataProcessor.checkAndSetAtomicData(kvEntry[0].trim(),kvEntry[1].trim());
                 if(isAtomicNum){
                     hasAtomicNum = true;
@@ -79,7 +79,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
 
     /**
      *
-     * Desc: merge the new accepted data to kvStore.
+     * Desc: merge the new accepted data to existing kvStore.
      *
      * @param: [kvStore, acceptedNewResults]
      * @return: void
@@ -94,7 +94,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
 
     /**
      *
-     * Desc: put value to map:
+     * Desc: utility to put value to map:
      * 1 numeric integer values accumulate.
      * 2 non-integers overwrite.
      *
@@ -136,18 +136,4 @@ public class DefaultKeysAndValues implements KeysAndValues {
         System.out.println(resultStr);
         return resultStr;
     }
-
-//    public static void main(String[] args){
-//        KeysAndValuesDefault kv = new KeysAndValuesDefault();
-//        kv.setErrorListener(new ErrorListenerDefault());
-//        kv.accept("14=15, 14=7,A=B52, 14 = 4, dry = Don't Repeat Yourself");
-//        kv.display();
-//        kv.getKvStore().clear();
-//
-//        kv.accept("one=two");
-//        kv.accept("Three=four");
-//        kv.accept("5=6");
-//        kv.accept("14=X");
-//        kv.display();
-//    }
 }
