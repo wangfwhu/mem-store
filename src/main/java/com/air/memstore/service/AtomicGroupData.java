@@ -1,4 +1,4 @@
-package com.air.calculator.service;
+package com.air.memstore.service;
 
 import lombok.Data;
 
