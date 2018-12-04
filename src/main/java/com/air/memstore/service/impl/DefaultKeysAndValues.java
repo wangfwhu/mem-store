@@ -12,16 +12,16 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * @Auther: David
  * @Date: 2018-12-03 16:14
- * @Description: Provider the main methods to store and display key-values,
+ * @Description: Provider the main methods to kvStore and display key-values,
  *
  */
 @Data
 public class DefaultKeysAndValues implements KeysAndValues {
 
-    //main store
-    private final ConcurrentHashMap<String,String> store = new ConcurrentHashMap();
+    //main kvStore
+    private final ConcurrentHashMap<String,String> kvStore = new ConcurrentHashMap();
 
-    //store the atomic group data if args of accept() have any atomic data;
+    //kvStore the atomic group data if args of accept() have any atomic data;
     private AtomicDataProcessor atomicDataProcessor;
 
     ErrorListener errorListener;
@@ -31,10 +31,19 @@ public class DefaultKeysAndValues implements KeysAndValues {
             return;
         }else{
             Map<String,String> acceptedKvPairs = parseKvPairs(kvPairs);
-            mergeResults(store,acceptedKvPairs);
+            mergeResults(kvStore,acceptedKvPairs);
         }
     }
 
+    /**
+     *
+     * Desc: parse the input string,the result is the map of entries:
+     *[14=15,A=B52]
+     * @param: [kvPairs]
+     * @return: java.util.Map<java.lang.String,java.lang.String>
+     * @auther: Wangfeng
+     * @date: 2018-12-04 18:50
+     */
     private Map<String,String> parseKvPairs(String kvPairs){
         Map<String,String> acceptedKvPairs = new HashMap<>();
         boolean hasAtomicNum = false;
@@ -46,7 +55,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
                     errorListener.onError("only alphanumeric keys are allowed,invalid key:"+kvEntry[0].trim());
                     continue;
                 }
-                //If it's atomic num, then put into the repo and skip it, will process them later.
+                //If it's atomic data, then store it into the processor and skip it, as we will process them together later.
                 boolean isAtomicNum = atomicDataProcessor.checkAndSetAtomicData(kvEntry[0].trim(),kvEntry[1].trim());
                 if(isAtomicNum){
                     hasAtomicNum = true;
@@ -57,7 +66,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
             }
         }
 
-        //Process atomic group specially.
+        //Process atomic group together specially.
         if(hasAtomicNum){
             Map<String, String> atomicData = atomicDataProcessor.checkAndSetAtomicMissing();
             if(atomicData != null && atomicData.size() > 0){
@@ -70,9 +79,9 @@ public class DefaultKeysAndValues implements KeysAndValues {
 
     /**
      *
-     * Desc: merge the new accepted data to store.
+     * Desc: merge the new accepted data to kvStore.
      *
-     * @param: [store, acceptedNewResults]
+     * @param: [kvStore, acceptedNewResults]
      * @return: void
      * @auther: Wangfeng
      * @date: 2018-12-04 11:57
@@ -102,7 +111,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
                 return;
             }
         }
-        //Put the value directly if not in the store.
+        //Put the value directly if not in the kvStore.
         //Non-integers overwrite.
         targetMap.put(key.trim(),value);
     }
@@ -118,10 +127,10 @@ public class DefaultKeysAndValues implements KeysAndValues {
                 return p1.toLowerCase().compareTo(p2.toLowerCase());
             }
         });
-        keys.addAll(store.keySet());
+        keys.addAll(kvStore.keySet());
         for(String key:keys){
             //String displays all key-value pairs (one pair per line)
-            resultStrBuilder.append(key).append("=").append(store.get(key)).append("\n");
+            resultStrBuilder.append(key).append("=").append(kvStore.get(key)).append("\n");
         }
         String resultStr = resultStrBuilder.toString();
         System.out.println(resultStr);
@@ -133,7 +142,7 @@ public class DefaultKeysAndValues implements KeysAndValues {
 //        kv.setErrorListener(new ErrorListenerDefault());
 //        kv.accept("14=15, 14=7,A=B52, 14 = 4, dry = Don't Repeat Yourself");
 //        kv.display();
-//        kv.getStore().clear();
+//        kv.getKvStore().clear();
 //
 //        kv.accept("one=two");
 //        kv.accept("Three=four");

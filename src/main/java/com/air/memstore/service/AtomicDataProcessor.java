@@ -15,5 +15,5 @@ public interface AtomicDataProcessor {
     boolean checkAndSetAtomicData(String key, String value);
     Map<String,String> checkAndSetAtomicMissing();
     void setErrorListener(ErrorListener errorListener);
-    void setCustmizedAtomicGroup(List<String> atomicGroupCust);
+    void setCustomizedAtomicGroup(List<String> atomicGroupCust);
 }

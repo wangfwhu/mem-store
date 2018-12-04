@@ -79,11 +79,28 @@ public class KeysAndValuesTestCase {
 		kv.display();
 	}
 
+
+	@Test
+	public void testThirdGroupIncomplete() {
+		System.out.println("Start testThirdGroupIncomplete");
+
+		kv.accept("500= three , 6 = 7 ,441= one,442=1,442=abc,441= cpp,500= xt,500= three");
+		kv.display();
+	}
+
 	@Test
 	public void testInvalidKey() {
 		System.out.println("Start testInvalidKey");
 
 		kv.accept("5_0= three , 6* = 7 ,4= one,442=1,442=4");
+		kv.display();
+	}
+
+	@Test
+	public void testInvalidString() {
+		System.out.println("Start testInvalidKey");
+
+		kv.accept(" 50 = three; 6* = 7 ,4= one,442=1,442=4 ");
 		kv.display();
 	}
 
@@ -96,7 +113,7 @@ public class KeysAndValuesTestCase {
 		atomicGroupCust.add("14");
 		atomicGroupCust.add("dry");
 
-		kv.getAtomicDataProcessor().setCustmizedAtomicGroup(atomicGroupCust);
+		kv.getAtomicDataProcessor().setCustomizedAtomicGroup(atomicGroupCust);
 
 		kv.accept("14=15, 14=7,A=B52, 14 = 4, dry = Don't Repeat Yourself");
 		kv.display();
@@ -111,7 +128,7 @@ public class KeysAndValuesTestCase {
 		atomicGroupCust.add("14");
 		atomicGroupCust.add("dry");
 
-		kv.getAtomicDataProcessor().setCustmizedAtomicGroup(atomicGroupCust);
+		kv.getAtomicDataProcessor().setCustomizedAtomicGroup(atomicGroupCust);
 
 		kv.accept("14=15, atomic1=7,A=B52, 14 = 4, dry = Don't Repeat Yourself");
 		kv.display();
@@ -126,7 +143,7 @@ public class KeysAndValuesTestCase {
 		atomicGroupCust.add("442");
 		atomicGroupCust.add("500");
 
-		kv.getAtomicDataProcessor().setCustmizedAtomicGroup(atomicGroupCust);
+		kv.getAtomicDataProcessor().setCustomizedAtomicGroup(atomicGroupCust);
 
 		kv.accept("500= three , 6 = 7 ,441= one,442=1,442=4");
 		kv.display();
